@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta
     name="description"
-    content="KinoVaPong, a Kinova Gen3 Lite beer pong robot arm by Muhammad Ahmed using ROS 2, MoveIt 2, and RealSense perception."
+    content="KinoVaPong, a Kinova Gen3 Lite beer pong robot arm by Muhammad Ahmed using ROS 2, MoveIt 2."
   />
   <style>
     :root {
@@ -535,7 +535,6 @@
           <div class="hero-pill-row">
             <span class="hero-pill highlight">ROS 2 · MoveIt 2</span>
             <span class="hero-pill">Kinova Gen3 Lite · 2F Gripper</span>
-            <span class="hero-pill">RealSense RGB-D Perception</span>
             <span class="hero-pill">Angle-based Ball Release</span>
           </div>
         </div>
@@ -559,7 +558,6 @@
     <nav class="section-nav">
       <a href="#overview" class="active">Overview</a>
       <a href="#design">System Design</a>
-      <a href="#perception">Perception</a>
       <a href="#technical">Control & Trajectory</a>
       <a href="#results">Experiments</a>
     </nav>
@@ -689,52 +687,6 @@
       </div>
     </section>
 
-    <!-- PERCEPTION -->
-    <section id="perception">
-      <div class="section-header">
-        <h3>Perception & Cup Detection</h3>
-        <span>Using RealSense to find the target</span>
-      </div>
-
-      <p>
-        The perception side of the project is handled by
-        <code>RedCupAnglePublisher</code>, which subscribes to RealSense RGB-D
-        streams, finds the red cup, and estimates its yaw angle. The RGB image is
-        converted to HSV and thresholded with two red masks; the largest contour is
-        treated as the cup, and the depth at its centroid is read from the aligned
-        depth frame. With camera intrinsics, that 2D pixel and depth are
-        deprojected into 3D, and the yaw angle is computed using
-        <code>atan2(-X, Z)</code>.
-      </p>
-
-      <div class="two-col" style="margin-top:12px;">
-        <div>
-          <div class="mini-label">Cup centered in view</div>
-          <div class="img-frame">
-            <img
-              src="images/cup_center.jpeg"
-              alt="Cup detection with cup centered in the workspace"
-            />
-          </div>
-        </div>
-        <div>
-          <div class="mini-label">Cup shifted to the right</div>
-          <div class="img-frame">
-            <img
-              src="images/cup_right.jpeg"
-              alt="Cup detection with cup on the right side of the table"
-            />
-          </div>
-        </div>
-      </div>
-
-      <p class="footnote">
-        The bounding box and coordinate overlay let us check that the cup is being
-        detected in the right region and that the estimated (X, Y, Z) and yaw line
-        up with the physical setup before we start throwing.
-      </p>
-    </section>
-
     <!-- TECHNICAL DETAILS -->
     <section id="technical">
       <div class="section-header">
@@ -837,10 +789,6 @@
             <li>
               Small changes to release angle or velocity scaling had a big impact
               on where the ball landed.
-            </li>
-            <li>
-              Separating perception, planning, and gripper logic into different
-              nodes made it easier to debug and iterate quickly.
             </li>
             <li>
               Parameter sweeps were essential for moving from “lucky shots” to a
